@@ -1,1 +1,87 @@
-lit
+import streamlit as st
+import matplotlib.pyplot as plt
+
+# --- Page Setup ---
+st.set_page_config(page_title="EcoTrack - Carbon Footprint Tracker", page_icon="🌿")
+
+# --- Custom Styling ---
+st.markdown("""
+<style>
+body {
+        background: linear-gradient(135deg, #d7f7e3, #f0fff0);
+            color: #2e2e2e;
+                font-family: 'Segoe UI', sans-serif;
+}
+h1, h2, h3 {
+        text-align: center;
+            color: #1b5e20;
+}
+.section {
+        background-color: #ffffffcc;
+            border-radius: 15px;
+                padding: 20px;
+                    box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+                        margin-bottom: 20px;
+}
+.tip-box {
+        background: #e8f5e9;
+            border-left: 6px solid #43a047;
+                padding: 10px 15px;
+                    border-radius: 10px;
+                        margin: 10px 0;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# --- Title ---
+st.title("🌿 EcoTrack - Carbon Footprint Tracker")
+st.write("Track your daily CO₂ emissions and learn how to reduce them!")
+
+# --- User Inputs ---
+st.markdown("<div class='section'>", unsafe_allow_html=True)
+st.header("🚗 Enter Your Daily Activities")
+
+transport = st.slider("Kilometers traveled by car", 0, 200, 10)
+electricity = st.slider("Electricity used (kWh per day)", 0, 100, 10)
+food_type = st.selectbox("Your diet type", ["Plant-based", "Vegetarian", "Non-Vegetarian"])
+st.markdown("</div>", unsafe_allow_html=True)
+
+# --- CO₂ Emission Factors ---
+co2_transport = transport * 0.21
+co2_electricity = electricity * 0.92
+
+if food_type == "Plant-based":
+    co2_food = 2.0
+    elif food_type == "Vegetarian":
+        co2_food = 3.0
+        else:
+            co2_food = 5.0
+
+            total_co2 = co2_transport + co2_electricity + co2_food
+
+            # --- Results ---
+            st.markdown("<div class='section'>", unsafe_allow_html=True)
+            st.subheader("🌍 Your Estimated CO₂ Emission")
+            st.metric("Daily CO₂ Emission (kg)", f"{total_co2:.2f}")
+            st.markdown("</div>", unsafe_allow_html=True)
+
+            # --- Graph Visualization ---
+            labels = ["Transport", "Electricity", "Food"]
+            values = [co2_transport, co2_electricity, co2_food]
+
+            fig, ax = plt.subplots()
+            ax.bar(labels, values, color=["#66bb6a", "#81c784", "#a5d6a7"])
+            ax.set_ylabel("CO₂ Emission (kg)")
+            ax.set_title("CO₂ Emission Breakdown")
+            st.pyplot(fig)
+
+            # --- Tips Section ---
+            st.markdown("<div class='tip-box'>", unsafe_allow_html=True)
+            st.write("💡 **Tip:** Use public transport or cycle to reduce your carbon footprint.")
+            st.write("💡 **Tip:** Switch off devices when not in use to save energy.")
+            st.write("💡 **Tip:** Choose plant-based meals more often to lower emissions.")
+            st.markdown("</div>", unsafe_allow_html=True)
+}
+}
+}
+}
